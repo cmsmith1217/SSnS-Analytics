@@ -14,40 +14,45 @@ function Inventory() {
     const fetchInventory = async () => {
       const response = await fetch(`${rootUrl}/inventory`);
       const data = await response.json();
+      console.log(data)
       setInventoryData(data);
     };
-    fetchInventory();
+    if (inventoryData.length === 0) {
+      fetchInventory();
+    } else {
+      console.log('Inventory Data Already Populated')
+    }
   }, []);
 
-  useEffect(() => {
-    const fetchSalesAnalytics = async () => {
-      const tempInventoryWithSalesShit = [];
-      for (const inventoryItem of inventoryData) {
-        if (inventoryItem.item.type === 'SET') {
-          const salesInfoShidder = await fetch(`${rootUrl}/set/${inventoryItem.item.no}/price?guide_type=sold&country_code=US`).then((response) => response.json());
-          inventoryItem.sales_anal = salesInfoShidder;
-          const listInfoShidder = await fetch(`${rootUrl}/set/${inventoryItem.item.no}/price?country_code=US`).then((response) => response.json());
-          inventoryItem.list_anal = listInfoShidder;
-          if (inventoryItem.item.name.indexOf('&#39;') > -1) {
-            let fixedName = inventoryItem.item.name.replace("&#39;", "'")
-            inventoryItem.item.name = fixedName;
-          }
-          tempInventoryWithSalesShit.push(inventoryItem);
-        }
-      }
-      setInventoryDataWithSalesAnalytics(tempInventoryWithSalesShit);
-    };
+  // useEffect(() => {
+  //   const fetchSalesAnalytics = async () => {
+  //     const tempInventoryWithSalesShit = [];
+  //     for (const inventoryItem of inventoryData) {
+  //       if (inventoryItem.item.type === 'SET') {
+  //         const salesInfoShidder = await fetch(`${rootUrl}/set/${inventoryItem.item.no}/price?guide_type=sold&country_code=US`).then((response) => response.json());
+  //         inventoryItem.sales_anal = salesInfoShidder;
+  //         const listInfoShidder = await fetch(`${rootUrl}/set/${inventoryItem.item.no}/price?country_code=US`).then((response) => response.json());
+  //         inventoryItem.list_anal = listInfoShidder;
+  //         if (inventoryItem.item.name.indexOf('&#39;') > -1) {
+  //           let fixedName = inventoryItem.item.name.replace("&#39;", "'")
+  //           inventoryItem.item.name = fixedName;
+  //         }
+  //         tempInventoryWithSalesShit.push(inventoryItem);
+  //       }
+  //     }
+  //     setInventoryDataWithSalesAnalytics(tempInventoryWithSalesShit);
+  //   };
 
-    if (inventoryData.length > 0) {
-      fetchSalesAnalytics();
-    }
-  }, [inventoryData]);
+  //   if (inventoryData.length > 0) {
+  //     fetchSalesAnalytics();
+  //   }
+  // }, [inventoryData]);
 
   return (
     <div style={{ backgroundImage: `url(${BackgroundImage})`, minHeight: window.innerHeight - 50 }}>
       <h1 style={{ backgroundColor: '#960000', margin: 0 }}>Inventory</h1>
       <Grid container sx={{ padding: '30px', justifyContent: 'center' }}>
-        {inventoryDataWithSalesAnalytics.map((element) => (
+        {inventoryData.map((element) => (
           <Card key={`${element.item.name}-${element.item.no}`} sx={{ borderWidth: '1px', borderStyle: 'solid', borderColor: 'red', margin: '30px', maxWidth: '3750px', width: '375px', backgroundColor: '#2b2b2b', padding: '5px' }}>
             <h3 style={{ margin: '0', borderBottomWidth: '1px', borderBottomStyle: 'solid', borderBottomColor: 'red' }}>
               <Link to={`http://localhost:3000/set/${element.item.no}`} style={{ color: '#ffffff', cursor: 'pointer', textDecoration: 'none' }} onMouseEnter={(e) => e.target.style.color = '#960000'} onMouseLeave={(e) => e.target.style.color = '#ffffff'}>
@@ -63,18 +68,18 @@ function Inventory() {
               <Grid container sx={{ padding: '5px' }}>
                 <Grid item>
                   <div>
-                    <span style={{ color: '#ffffff' }}>6 Mo Avg Sales: ${element.sales_anal.avg_price} - [{element.sales_anal.total_quantity} | {element.sales_anal.unit_quantity}]</span>
+                    {/* <span style={{ color: '#ffffff' }}>6 Mo Avg Sales: ${element.sales_anal.avg_price} - [{element.sales_anal.total_quantity} | {element.sales_anal.unit_quantity}]</span> */}
                   </div>
                   <div>
-                    <span style={{ color: '#ffffff' }}>Min/Max Price: ${element.sales_anal.min_price} / ${element.sales_anal.max_price}</span>
+                    {/* <span style={{ color: '#ffffff' }}>Min/Max Price: ${element.sales_anal.min_price} / ${element.sales_anal.max_price}</span> */}
                   </div>
                 </Grid>
                 <Grid item>
                   <div>
-                    <span style={{ color: '#ffffff' }}>Avg Listings: ${element.list_anal.avg_price} - [{element.list_anal.total_quantity} | {element.list_anal.unit_quantity}]</span>
+                    {/* <span style={{ color: '#ffffff' }}>Avg Listings: ${element.list_anal.avg_price} - [{element.list_anal.total_quantity} | {element.list_anal.unit_quantity}]</span> */}
                   </div>
                   <div>
-                    <span style={{ color: '#ffffff' }}>Min/Max Price: ${element.list_anal.min_price} / ${element.list_anal.max_price}</span>
+                    {/* <span style={{ color: '#ffffff' }}>Min/Max Price: ${element.list_anal.min_price} / ${element.list_anal.max_price}</span> */}
                   </div>
                 </Grid>
               </Grid>
